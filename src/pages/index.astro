@@ -1,16 +1,63 @@
 ---
+import "bootstrap/dist/css/bootstrap.min.css";
+import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js?url";
+import Chart from "../components/Chart.tsx";
 
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
+// async function getMesCountByAutor() {
+//   try {
+//     console.log("Trying");
+//     return await prisma.controle_material.groupBy({
+//       by: ["mes"],
+//       _count: {
+//         mes: true,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error:", error);
+//     return [""];
+//   } finally {
+//     await prisma.$disconnect();
+//   }
+// }
+async function getCodigoCountByMes() {
+  const result = await prisma.controle_material.groupBy({
+    by: ["mes"],
+    _count: {
+      mes: true,
+    },
+  });
+
+  return result;
+}
+
+getCodigoCountByMes()
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error))
+  .finally(() => prisma.$disconnect());
+
+const data = await getCodigoCountByMes();
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <div class="container mx-auto d-flex">
+      <Chart data={data} client:load />
+      <div>
+        <p>
+          Gráfico Chartjs com <br /> dados de um banco PostgreSQL
+        </p>
+        <p>Astro, React, Prisma, Chartjs, Bootstrap</p>
+      </div>
+    </div>
+  </body>
 </html>
