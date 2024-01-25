@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^9.0.0",
     "@astrojs/react": "^3.0.9",
     "@prisma/client": "5.8.1",
     "@types/react": "^18.2.48",
